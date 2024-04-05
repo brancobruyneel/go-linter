@@ -1,0 +1,300 @@
+# Options for analysis running.
+run:
+  timeout: 5m
+  issues-exit-code: 1
+
+# Output configuration options
+output:
+  sort-results: true
+
+# All available settings of specific linters.
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    exclude-functions:
+      - encoding/json.Marshal
+      - encoding/json.MarshalIndent
+  errchkjson:
+    check-error-free-encoding: true
+    report-no-exported: false
+  goconst:
+    min-len: 2
+    min-occurrences: 3
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+  goimports:
+    # ensure placement of imports with this prefix after all other imports
+    # corresponds to `goimports -local`
+    local-prefixes: github.com/ayoisaiah/f2
+  gomnd:
+    settings:
+      mnd:
+        # don't include the "operation" and "assign" checks
+        checks: argument,case,condition,return
+  govet:
+    check-shadowing: true
+    enable:
+      - fieldalignment
+  nestif:
+    min-complexity: 15
+  nolintlint:
+    require-explanation: true
+    require-specific: true
+  tagliatelle:
+    case:
+      rules:
+        json: snake
+  varnamelen:
+    max-distance: 10
+    ignore-decls:
+      - t testing.T
+      - i int
+      - j int
+      - ch Change
+      - ch *Change
+      - c *cli.Context
+      - op *Operation
+
+linters:
+  # Disable all linters.
+  # Default: false
+  disable-all: true
+  # Enable specific linter
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
+  enable:
+    # Check for pass []any as any in variadic func(...any).
+    - asasalint
+
+    # Simple linter to check that your code does not contain non-ASCII identifiers.
+    - asciicheck
+
+    # Checks for dangerous unicode character sequences.
+    - bidichk
+
+    # Checks whether HTTP response body is closed successfully.
+    - bodyclose
+
+    # Containedctx is a linter that detects struct contained context.Context field.
+    - containedctx
+
+    # Check whether the function uses a non-inherited context.
+    - contextcheck
+
+    # Check declaration order and count of types, constants, variables and functions.
+    - decorder
+
+    # Checks assignments with too many blank identifiers (e.g. x, , , _, := f()).
+    - dogsled
+
+    # Check for two durations multiplied together.
+    - durationcheck
+
+    # Errcheck is a program for checking for unchecked errors in Go code. These unchecked errors
+    # can be critical bugs in some cases.
+    - errcheck
+
+    # Checks types passed to the json encoding functions. Reports unsupported types and optionally
+    # reports occasions, where the check for the returned error can be omitted.
+    - errchkjson
+
+    # Checks that sentinel errors are prefixed with the Err and error types are suffixed with the
+    # Error.
+    - errname
+
+    # Execinquery is a linter about query string checker in Query function which reads your Go
+    # src files and warning it finds.
+    - execinquery
+
+    # Errorlint is a linter for that can be used to find code that will cause problems with
+    # the error wrapping scheme introduced in Go 1.13.
+    - errorlint
+
+    # Check exhaustiveness of enum switch statements.
+    - exhaustive
+
+    # Checks for pointers to enclosing loop variables.
+    - exportloopref
+
+    # Check that no global variables exist
+    #
+    # This analyzer checks for global variables and errors on any found.
+    #
+    # A global variable is a variable declared in package scope and that can be read
+    # and written to by any function within the package. Global variables can cause
+    # side effects which are difficult to keep track of. A code in one function may
+    # change the variables state while another unrelated chunk of code may be
+    # effected by it.
+    - gochecknoglobals
+
+    # Checks that no init functions are present in Go code.
+    - gochecknoinits
+
+    # Finds repeated strings that could be replaced by a constant.
+    - goconst
+
+    # Provides diagnostics that check for bugs, performance and style issues. Extensible without
+    # recompilation through dynamic rules. Dynamic rules are written declaratively with AST
+    # patterns, filters, report message and optional suggestion.
+    - gocritic
+
+    # Check if comments end in a period.
+    - godot
+
+    # Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check
+    # for code simplification.
+    - gofmt
+
+    # Gofumpt checks whether code was gofumpt-ed.
+    - gofumpt
+
+    # Check import statements are formatted according to the 'goimport' command. Reformat imports
+    # in autofix mode.
+    - goimports
+
+    # An analyzer to detect magic numbers.
+    - gomnd
+
+    # Checks that printf-like functions are named with f at the end.
+    - goprintffuncname
+
+    # Inspects source code for security problems.
+    - gosec
+
+    # Linter for Go source code that specializes in simplifying code.
+    - gosimple
+
+    # Vet examines Go source code and reports suspicious constructs, such as Printf calls
+    # whose arguments do not align with the format string.
+    - govet
+
+    # Accept Interfaces, Return Concrete Types.
+    - ireturn
+
+    # Detects when assignments to existing variables are not used.
+    - ineffassign
+
+    # Finds commonly misspelled English words in comments.
+    - misspell
+
+    # Reports deeply nested if statements.
+    - nestif
+
+    # Finds the code that returns nil even if it checks that the error is not nil.
+    - nilerr
+
+    # Checks that there is no simultaneous return of nil error and an invalid value.
+    - nilnil
+
+    # Reports ill-formed or insufficient nolint directives.
+    - nolintlint
+
+    # Finds slice declarations that could potentially be pre-allocated.
+    - prealloc
+
+    # Find code that shadows one of Go's predeclared identifiers.
+    - predeclared
+
+    # Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement
+    #
+    # of golint.
+    - revive
+
+    # It's a set of rules from staticcheck. It's not the same thing as the staticcheck binary.
+    # The author of staticcheck doesn't support or approve the use of staticcheck as a library
+    # inside golangci-lint.
+    - staticcheck
+
+    # Stylecheck is a replacement for golint.
+    - stylecheck
+
+    # Thelper detects Go test helpers without t.Helper() call and checks the consistency of test
+    # helpers.
+    - thelper
+
+    # Checks the struct tags.
+    - tagliatelle
+
+    # Tparallel detects inappropriate usage of t.Parallel() method in your Go test codes.
+    - tparallel
+
+    # Linter that makes you use a separate _test package.
+    # - testpackage
+
+    # Tenv is analyzer that detects using os.Setenv instead of t.Setenv since Go1.17.
+    - tenv
+
+    # Remove unnecessary type conversions.
+    - unconvert
+
+    # A linter that detect the possibility to use variables/constants from the Go standard library.
+    - usestdlibvars
+
+    # Reports unused function parameters.
+    - unparam
+
+    # Checks Go code for unused constants, variables, functions and types.
+    - unused
+
+    # Checks that the length of a variable's name matches its scope.
+    - varnamelen
+
+    # Tool for detection of leading and trailing whitespace.
+    - whitespace
+
+    # Whitespace Linter - Forces you to use empty lines!.
+    # - wsl
+
+  # Run only fast linters from enabled linters set (first run won't be fast)
+  # If you run golanglint-ci on save in your editor, you should enable it with commandline flags
+  # Default: false
+  fast: false
+
+issues:
+  # List of regexps of issue texts to exclude.
+  #
+  # But independently of this option we use default exclude patterns,
+  # it can be disabled by `exclude-use-default: false`.
+  # To list all excluded by default patterns execute `golangci-lint run --help`
+  #
+  # Default: https://golangci-lint.run/usage/false-positives/#default-exclusions
+  fix: true
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    - path: _test\.go # disable some linters for test files
+      linters:
+        - gosec
+        - varnamelen
+    - linters:
+        - gosec
+      text: "weak cryptographic primitive"
+    - linters:
+        - stylecheck
+      text: "error strings should not be capitalized"
+    - linters:
+        - typecheck
+      text: "undeclared name"
+
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+severity:
+  # Set the default severity for issues.
+  #
+  # If severity rules are defined and the issues do not match or no severity is provided to the rule
+  # this will be the default severity applied.
+  # Severities should match the supported severity names of the selected out format.
+  # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
+  # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#SeverityLevel
+  # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  # - TeamCity: https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
+  #
+  # Default value is an empty string.
+  default-severity: error
+  # If set to true `severity-rules` regular expressions become case-sensitive.
+  # Default: false
+  case-sensitive: true
