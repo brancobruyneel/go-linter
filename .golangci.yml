@@ -2,6 +2,7 @@
 run:
   timeout: 5m
   issues-exit-code: 1
+  modules-download-mode: readonly
 
 # Output configuration options
 output:
@@ -9,6 +10,14 @@ output:
 
 # All available settings of specific linters.
 linters-settings:
+  dupl:
+    # tokens count to trigger issue, 150 by default
+    threshold: 100
+  exhaustive:
+    # Presence of "default" case in switch statements satisfies exhaustiveness,
+    # even if all enum members are not listed.
+    # Default: false
+    default-signifies-exhaustive: true
   errcheck:
     check-type-assertions: true
     exclude-functions:
@@ -19,7 +28,7 @@ linters-settings:
     report-no-exported: false
   goconst:
     min-len: 2
-    min-occurrences: 3
+    min-occurrences: 2
   gocritic:
     enabled-tags:
       - diagnostic
@@ -31,27 +40,16 @@ linters-settings:
     # ensure placement of imports with this prefix after all other imports
     # corresponds to `goimports -local`
     local-prefixes: github.com/ayoisaiah/f2
-  gomnd:
-    settings:
-      mnd:
-        # don't include the "operation" and "assign" checks
-        checks: argument,case,condition,return
-  govet:
-    check-shadowing: true
-    enable:
-      - fieldalignment
   nestif:
     min-complexity: 15
   nolintlint:
     require-explanation: true
     require-specific: true
-  tagliatelle:
-    case:
-      rules:
-        json: snake
   varnamelen:
     max-distance: 10
+    min-name-length: 2
     ignore-decls:
+      - c *context.Mqtt
       - t testing.T
       - i int
       - j int
@@ -69,6 +67,9 @@ linters:
   enable:
     # Check for pass []any as any in variadic func(...any).
     - asasalint
+
+    # dupl is a tool written in Go for finding code clones.
+    - dupl
 
     # Simple linter to check that your code does not contain non-ASCII identifiers.
     - asciicheck
@@ -105,10 +106,10 @@ linters:
     # Checks that sentinel errors are prefixed with the Err and error types are suffixed with the
     # Error.
     - errname
-
-    # Execinquery is a linter about query string checker in Query function which reads your Go
-    # src files and warning it finds.
-    - execinquery
+    #
+    # # Execinquery is a linter about query string checker in Query function which reads your Go
+    # # src files and warning it finds.
+    # - execinquery
 
     # Errorlint is a linter for that can be used to find code that will cause problems with
     # the error wrapping scheme introduced in Go 1.13.
@@ -145,6 +146,7 @@ linters:
     # Check if comments end in a period.
     - godot
 
+
     # Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check
     # for code simplification.
     - gofmt
@@ -155,9 +157,6 @@ linters:
     # Check import statements are formatted according to the 'goimport' command. Reformat imports
     # in autofix mode.
     - goimports
-
-    # An analyzer to detect magic numbers.
-    - gomnd
 
     # Checks that printf-like functions are named with f at the end.
     - goprintffuncname
@@ -216,9 +215,6 @@ linters:
     # helpers.
     - thelper
 
-    # Checks the struct tags.
-    - tagliatelle
-
     # Tparallel detects inappropriate usage of t.Parallel() method in your Go test codes.
     - tparallel
 
@@ -262,7 +258,7 @@ issues:
   # To list all excluded by default patterns execute `golangci-lint run --help`
   #
   # Default: https://golangci-lint.run/usage/false-positives/#default-exclusions
-  fix: true
+  fix: false
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go # disable some linters for test files
@@ -298,3 +294,10 @@ severity:
   # If set to true `severity-rules` regular expressions become case-sensitive.
   # Default: false
   case-sensitive: true
+
+  rules:
+    - linters:
+      - errcheck
+      - gocritic
+      - goconst
+      severity: info
